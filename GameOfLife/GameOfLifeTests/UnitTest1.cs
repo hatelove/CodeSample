@@ -30,6 +30,26 @@ namespace GameOfLifeTests
             Assert.AreEqual(0, liveCells[0].X);
             Assert.AreEqual(0, liveCells[0].Y);
         }
+
+        [TestMethod]
+        public void three_cells_not_near()
+        {
+            var cells = new List<Cell> { new Cell(-2, 0), new Cell(0, 0), new Cell(1, 0) };
+            var world = new World(cells);
+            var liveCells = world.NextMoment();
+            Assert.AreEqual(0, liveCells.Count);
+        }
+
+        [TestMethod]
+        public void four_cells_not_near()
+        {
+            var cells = new List<Cell> { new Cell(-1, 1), new Cell(1, 1), new Cell(0, 0), new Cell(-1, -1) };
+            var world = new World(cells);
+            var liveCells = world.NextMoment();
+            Assert.AreEqual(1, liveCells.Count);
+            Assert.AreEqual(0, liveCells[0].X);
+            Assert.AreEqual(0, liveCells[0].Y);
+        }
     }
 
     internal class World
