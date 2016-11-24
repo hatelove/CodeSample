@@ -54,11 +54,7 @@ namespace GameOfLifeTests
             var cells = new List<Cell> { new Cell(0, 0), new Cell(1, 0), new Cell(2, 0), new Cell(3, 0) };
             var world = new World(cells);
             List<Cell> liveCells = world.NextMoment();
-            Assert.AreEqual(2, liveCells.Count);
-            Assert.AreEqual(1, liveCells[0].X);
-            Assert.AreEqual(0, liveCells[0].Y);
-            Assert.AreEqual(2, liveCells[1].X);
-            Assert.AreEqual(0, liveCells[1].Y);
+            Assert.AreEqual(6, liveCells.Count);
         }
 
         [TestMethod]
@@ -67,7 +63,7 @@ namespace GameOfLifeTests
             var cells = new List<Cell> { new Cell(1, 1), new Cell(1, 0), new Cell(2, 0) };
             var world = new World(cells);
             List<Cell> liveCells = world.NextMoment();
-            Assert.AreEqual(3, liveCells.Count);
+            Assert.AreEqual(4, liveCells.Count);
         }
 
         [TestMethod]
@@ -76,8 +72,8 @@ namespace GameOfLifeTests
             var cells = new List<Cell> { new Cell(-1, 0), new Cell(-1, 1), new Cell(0, 0), new Cell(0, 1), new Cell(1, 1) };
             var world = new World(cells);
             List<Cell> liveCells = world.NextMoment();
-            var expected = new List<Cell> { new Cell(-1, 0), new Cell(-1, 1), new Cell(1, 1) };
-            expected.ToExpectedObject().ShouldEqual(liveCells);
+
+            Assert.AreEqual(5, liveCells.Count);
         }
     }
 
