@@ -48,7 +48,22 @@ namespace GameOfLifeTests
 
         internal List<Cell> NextMoment()
         {
-            return new List<Cell>();
+            var result = new List<Cell>();
+            foreach (var cell in this.cells)
+            {
+                //var table = GetTable(Tuple.Create(cell.X, cell.Y));
+                var x_start = cell.X - 1;
+                var y_start = cell.Y - 1;
+                var x_end = cell.X + 1;
+                var y_end = cell.Y + 1;
+                var matchCount = this.cells.Count(c => c.X >= x_start && c.X <= x_end && c.Y >= y_start && c.Y <= y_end);
+                if (matchCount >= 3 && matchCount <= 5)
+                {
+                    result.Add(new Cell(cell.X, cell.Y));
+                }
+            }
+
+            return result;
         }
     }
 
