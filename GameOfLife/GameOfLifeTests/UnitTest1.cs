@@ -23,14 +23,14 @@ namespace GameOfLifeTests
         {
             var cells = new List<Cell>
             {
-                new Cell(0,0,Status.Live),
+                new Cell(0,0,true),
             };
 
             var world = new World(cells);
 
             var result = world.NextMoment();
 
-            Assert.AreEqual(Status.Death, result.First().Status);
+            Assert.IsFalse(result.First().IsAlive);
         }
     }
 
@@ -43,18 +43,18 @@ namespace GameOfLifeTests
 
     internal class Cell
     {
-        private Status status;
+        private bool status;
         private int _x;
         private int _y;
 
-        public Cell(int x, int y, Status status)
+        public Cell(int x, int y, bool isAlive)
         {
             this._x = x;
             this._y = y;
-            this.status = status;
+            this.status = isAlive;
         }
 
-        public Status Status
+        public bool IsAlive
         {
             get { return this.status; }
             set { this.status = value; }
@@ -81,9 +81,9 @@ namespace GameOfLifeTests
                 return this.cells;
             }
 
-            if (this.cells.First().Status == Status.Live)
+            if (this.cells.First().IsAlive)
             {
-                this.cells.First().Status = Status.Death;
+                this.cells.First().IsAlive = false;
             }
 
             return this.cells;
