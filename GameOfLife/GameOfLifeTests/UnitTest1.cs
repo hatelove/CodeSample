@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using System;
+using System.Linq;
 
 namespace GameOfLifeTests
 {
@@ -28,7 +28,7 @@ namespace GameOfLifeTests
 
         internal List<Cell> NextMoment()
         {
-            throw new NotImplementedException();
+            return new List<Cell>();
         }
     }
 
@@ -41,6 +41,8 @@ namespace GameOfLifeTests
         {
             this._x = x;
             this._y = y;
-        }              
+        }
+
+        public bool IsAlive { get; internal set; } = true;
     }
 }
