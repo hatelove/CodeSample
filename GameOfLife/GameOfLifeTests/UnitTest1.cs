@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace GameOfLifeTests
 {
@@ -8,89 +9,26 @@ namespace GameOfLifeTests
     public class UnitTest1
     {
         [TestMethod]
-        public void without_any_cell()
+        public void one_cell()
         {
-            var cells = new List<Cell>();
+            var cells = new List<Cell> { new Cell(0, 0) };
+
             var world = new World(cells);
 
-            List<Cell> result = world.NextMoment();
+            List<Cell> liveCells = world.NextMoment();
 
-            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(0, liveCells.Count);
         }
 
         [TestMethod]
-        public void only_one_cell()
+        public void three_cells_near()
         {
-            var cells = new List<Cell>
-            {
-                new Cell(0,0),
-            };
-
+            var cells = new List<Cell> { new Cell(-1, 0), new Cell(0, 0), new Cell(1, 0) };
             var world = new World(cells);
-
-            var result = world.NextMoment();
-
-            Assert.AreEqual(0, result.Count);
-        }
-
-        [TestMethod]
-        public void two_cell_near()
-        {
-            var cells = new List<Cell>
-            {
-                new Cell(0,0),
-                new Cell(0,1)
-            };
-
-            var world = new World(cells);
-
-            var result = world.NextMoment();
-
-            Assert.AreEqual(0, result.Count);
-        }
-
-        [TestMethod]
-        public void three_cells()
-        {
-            var cells = new List<Cell>
-            {
-                new Cell(0,0),
-                new Cell(-1,0),
-                new Cell(1,0),
-            };
-
-            var world = new World(cells);
-
-            var result = world.NextMoment();
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(0, result[0].X);
-            Assert.AreEqual(0, result[0].Y);
-        }
-    }
-
-    internal class Cell
-    {
-        private bool isAlive = true;
-        private int _x;
-        private int _y;
-
-        public Cell(int x, int y)
-        {
-            this._x = x;
-            this._y = y;
-        }
-
-        public bool IsAlive
-        {
-            get { return this.isAlive; }
-            set { this.isAlive = value; }
-        }
-
-        public int X { get { return this._x; } }
-
-        public int Y
-        {
-            get { return this._y; }
+            var liveCells = world.NextMoment();
+            Assert.AreEqual(1, liveCells.Count);
+            Assert.AreEqual(0, liveCells[0].X);
+            Assert.AreEqual(0, liveCells[0].Y);
         }
     }
 
@@ -105,20 +43,46 @@ namespace GameOfLifeTests
 
         internal List<Cell> NextMoment()
         {
-            if (!this.cells.Any())
-            {
-                return this.cells;
-            }
-
             foreach (var cell in this.cells)
             {
-                if (cell.IsAlive)
-                {
-                    cell.IsAlive = false;
-                }
+                cell.IsAlive = CheckCellShouldLive(cell, this.cells);
             }
-
             return this.cells.Where(x => x.IsAlive).ToList();
         }
+
+        private bool CheckCellShouldLive(Cell cell, List<Cell> cells)
+        {
+            var count = cells.Count(item => isNear(cell, item));
+            return count >= 3;
+        }
+
+        private static bool isNear(Cell cell, Cell another)
+        {
+            var isNotNear = another.X > (cell.X + 1) || another.Y > (cell.Y + 1);
+            var isNotNear_2 = another.X < (cell.X - 1) || another.Y < (cell.Y - 1);
+            return !(isNotNear || isNotNear_2);
+        }
+    }
+
+    internal class Cell
+    {
+        private int x;
+        private int y;
+        private bool _isAlive = true;
+
+        public Cell(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+
+        public bool IsAlive
+        {
+            get { return this._isAlive; }
+            set { this._isAlive = value; }
+        }
+
+        public int X { get { return this.x; } }
+        public int Y { get { return this.y; } }
     }
 }
