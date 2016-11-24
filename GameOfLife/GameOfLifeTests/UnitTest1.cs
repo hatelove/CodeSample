@@ -15,6 +15,15 @@ namespace GameOfLifeTests
             List<Cell> liveCells = world.NextMoment();
             Assert.AreEqual(0, liveCells.Count);
         }
+
+        [TestMethod]
+        public void only_two_near_cell_alive_to_death()
+        {
+            var cells = new List<Cell> { new Cell(0, 0), new Cell(1, 0) };
+            var world = new World(cells);
+            List<Cell> liveCells = world.NextMoment();
+            Assert.AreEqual(0, liveCells.Count);
+        }
     }
 
     internal class World
