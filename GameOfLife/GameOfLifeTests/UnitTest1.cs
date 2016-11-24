@@ -48,6 +48,24 @@ namespace GameOfLifeTests
 
             Assert.AreEqual(0, result.Count);
         }
+
+        [TestMethod]
+        public void three_cells()
+        {
+            var cells = new List<Cell>
+            {
+                new Cell(0,0),
+                new Cell(-1,0),
+                new Cell(1,0),
+            };
+
+            var world = new World(cells);
+
+            var result = world.NextMoment();
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual(0, result[0].X);
+            Assert.AreEqual(0, result[0].Y);
+        }
     }
 
     internal class Cell
@@ -67,15 +85,18 @@ namespace GameOfLifeTests
             get { return this.isAlive; }
             set { this.isAlive = value; }
         }
+
+        public int X { get { return this._x; } }
+
+        public int Y
+        {
+            get { return this._y; }
+        }
     }
 
     internal class World
     {
         private List<Cell> cells;
-
-        public World()
-        {
-        }
 
         public World(List<Cell> cells)
         {
