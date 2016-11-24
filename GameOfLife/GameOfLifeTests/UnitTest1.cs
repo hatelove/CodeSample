@@ -24,6 +24,17 @@ namespace GameOfLifeTests
             List<Cell> liveCells = world.NextMoment();
             Assert.AreEqual(0, liveCells.Count);
         }
+
+        [TestMethod]
+        public void three_near_cells_one_alive()
+        {
+            var cells = new List<Cell> { new Cell(0, 0), new Cell(1, 0), new Cell(2, 0) };
+            var world = new World(cells);
+            List<Cell> liveCells = world.NextMoment();
+            Assert.AreEqual(1, liveCells.Count);
+            Assert.AreEqual(1, liveCells[0].X);
+            Assert.AreEqual(0, liveCells[0].Y);
+        }
     }
 
     internal class World
@@ -53,5 +64,7 @@ namespace GameOfLifeTests
         }
 
         public bool IsAlive { get; internal set; } = true;
+        public int X { get { return this._x; } }
+        public int Y { get { return this._y; } }
     }
 }
