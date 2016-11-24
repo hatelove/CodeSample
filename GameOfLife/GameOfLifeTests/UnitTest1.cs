@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using ExpectedObjects;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -48,7 +49,7 @@ namespace GameOfLifeTests
         [TestMethod]
         public void four_near_cells()
         {
-            var cells = new List<Cell> { new Cell(0, 0), new Cell(1, 0), new Cell(2, 0), new Cell(3,0)};
+            var cells = new List<Cell> { new Cell(0, 0), new Cell(1, 0), new Cell(2, 0), new Cell(3, 0) };
             var world = new World(cells);
             List<Cell> liveCells = world.NextMoment();
             Assert.AreEqual(2, liveCells.Count);
@@ -56,6 +57,25 @@ namespace GameOfLifeTests
             Assert.AreEqual(0, liveCells[0].Y);
             Assert.AreEqual(2, liveCells[1].X);
             Assert.AreEqual(0, liveCells[1].Y);
+        }
+
+        [TestMethod]
+        public void three_near_cells_with_y()
+        {
+            var cells = new List<Cell> { new Cell(1, 1), new Cell(1, 0), new Cell(2, 0) };
+            var world = new World(cells);
+            List<Cell> liveCells = world.NextMoment();
+            Assert.AreEqual(3, liveCells.Count);
+        }
+
+        [TestMethod]
+        public void five_near_cells()
+        {
+            var cells = new List<Cell> { new Cell(-1, 0), new Cell(-1, 1), new Cell(0, 0), new Cell(0, 1), new Cell(1, 1) };
+            var world = new World(cells);
+            List<Cell> liveCells = world.NextMoment();            
+            var expected = new List<Cell> { new Cell(-1, 0), new Cell(-1, 1), new Cell(1, 1) };
+            expected.ToExpectedObject().ShouldEqual(liveCells);
         }
     }
 
@@ -79,7 +99,7 @@ namespace GameOfLifeTests
                 var x_end = cell.X + 1;
                 var y_end = cell.Y + 1;
                 var matchCount = this.cells.Count(c => c.X >= x_start && c.X <= x_end && c.Y >= y_start && c.Y <= y_end);
-                if (matchCount >= 3 && matchCount <= 5)
+                if (matchCount >= 3 && matchCount < 5)
                 {
                     result.Add(new Cell(cell.X, cell.Y));
                 }
