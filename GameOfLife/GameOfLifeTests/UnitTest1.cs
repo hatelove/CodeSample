@@ -23,41 +23,49 @@ namespace GameOfLifeTests
         {
             var cells = new List<Cell>
             {
-                new Cell(0,0,true),
+                new Cell(0,0),
             };
 
             var world = new World(cells);
 
             var result = world.NextMoment();
 
-            Assert.IsFalse(result.First().IsAlive);
+            Assert.AreEqual(0, result.Count);
         }
-    }
 
-    internal enum Status
-    {
-        None,
-        Live,
-        Death
+        [TestMethod]
+        public void two_cell_near()
+        {
+            var cells = new List<Cell>
+            {
+                new Cell(0,0),
+                new Cell(0,1)
+            };
+
+            var world = new World(cells);
+
+            var result = world.NextMoment();
+
+            Assert.AreEqual(0, result.Count);
+        }
     }
 
     internal class Cell
     {
-        private bool status;
+        private bool isAlive = true;
         private int _x;
         private int _y;
 
-        public Cell(int x, int y, bool isAlive)
+        public Cell(int x, int y)
         {
             this._x = x;
             this._y = y;
-            this.status = isAlive;
         }
 
         public bool IsAlive
         {
-            get { return this.status; }
-            set { this.status = value; }
+            get { return this.isAlive; }
+            set { this.isAlive = value; }
         }
     }
 
@@ -81,12 +89,15 @@ namespace GameOfLifeTests
                 return this.cells;
             }
 
-            if (this.cells.First().IsAlive)
+            foreach (var cell in this.cells)
             {
-                this.cells.First().IsAlive = false;
+                if (cell.IsAlive)
+                {
+                    cell.IsAlive = false;
+                }
             }
 
-            return this.cells;
+            return this.cells.Where(x => x.IsAlive).ToList();
         }
     }
 }
